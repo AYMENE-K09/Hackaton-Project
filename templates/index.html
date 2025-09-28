@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Books</h1>
+<a href="{{ url_for('create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Add Book</a>
+<table class="min-w-full bg-white shadow rounded">
+  <tr>
+    <th class="px-4 py-2">Title</th>
+    <th class="px-4 py-2">Year</th>
+    <th class="px-4 py-2">Actions</th>
+  </tr>
+  {% for book in books %}
+  <tr>
+    <td class="border px-4 py-2">{{ book.title }}</td>
+    <td class="border px-4 py-2">{{ book.publication_year }}</td>
+    <td class="border px-4 py-2">
+      <a href="{{ url_for('details', id=book.id) }}" class="text-blue-500">View</a> |
+      <a href="{{ url_for('edit', id=book.id) }}" class="text-green-500">Edit</a> |
+      <form action="{{ url_for('delete', id=book.id) }}" method="post" style="display:inline;">
+        <button type="submit" class="text-red-500">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

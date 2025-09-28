@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Add New Book</h1>
+<form method="post" class="bg-white p-4 shadow rounded">
+    <label class="block mb-2">Title</label>
+    <input type="text" name="title" class="w-full border p-2 mb-4">
+    <label class="block mb-2">Description</label>
+    <textarea name="description" class="w-full border p-2 mb-4"></textarea>
+    <label class="block mb-2">Publication Year</label>
+    <input type="number" name="publication_year" class="w-full border p-2 mb-4">
+    <label class="block mb-2">Category</label>
+    <select name="category_id" class="w-full border p-2 mb-4">
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Book</button>
+</form>
+{% endblock %}
