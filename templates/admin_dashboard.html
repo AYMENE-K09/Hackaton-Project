@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Statistics - Library Management System{% endblock %}
+{% block title %}Admin Dashboard - Library Management System{% endblock %}
 
 {% block content %}
 <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">
-        <i class="fas fa-chart-bar mr-2 text-primary"></i>Library Statistics
+        <i class="fas fa-tachometer-alt mr-2 text-primary"></i>Admin Dashboard
     </h1>
-    <p class="text-gray-600">Overview of your library's data and usage patterns.</p>
+    <p class="text-gray-600">Welcome back, {{ current_user.username }}! Here's an overview of your library system.</p>
 </div>
 
 <!-- Statistics Cards -->
@@ -37,15 +37,15 @@
         </div>
     </div>
 
-    <!-- Total Categories -->
+    <!-- Total Users -->
     <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-accent">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm font-medium text-gray-600">Categories</p>
-                <p class="text-3xl font-bold text-gray-900">{{ total_categories }}</p>
+                <p class="text-sm font-medium text-gray-600">Total Users</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_users }}</p>
             </div>
             <div class="bg-accent bg-opacity-10 p-3 rounded-full">
-                <i class="fas fa-tags text-2xl text-accent"></i>
+                <i class="fas fa-users text-2xl text-accent"></i>
             </div>
         </div>
     </div>
@@ -65,8 +65,70 @@
     </div>
 </div>
 
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <!-- Recent Books -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-book-open mr-2 text-primary"></i>Recent Books
+        </h2>
+        {% if recent_books %}
+        <div class="space-y-3">
+            {% for book in recent_books %}
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div class="flex-1">
+                    <h3 class="font-medium text-gray-800">{{ book.title }}</h3>
+                    <p class="text-sm text-gray-600">{{ book.publication_year }} • {{ book.category.name if book.category else 'No Category' }}</p>
+                </div>
+                <a href="{{ url_for('details', id=book.id) }}" class="text-primary hover:text-secondary">
+                    <i class="fas fa-eye"></i>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-book text-4xl mb-2"></i>
+            <p>No books found</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Users -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-user-plus mr-2 text-primary"></i>Recent Users
+        </h2>
+        {% if recent_users %}
+        <div class="space-y-3">
+            {% for user in recent_users %}
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div class="flex-1">
+                    <h3 class="font-medium text-gray-800">{{ user.username }}</h3>
+                    <p class="text-sm text-gray-600">{{ user.email }}</p>
+                    <p class="text-xs text-gray-500">Joined: {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    {% if user.is_admin %}
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Admin</span>
+                    {% else %}
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">User</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-user text-4xl mb-2"></i>
+            <p>No users found</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
 <!-- Charts Section -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
     <!-- Books by Category -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -133,30 +195,37 @@
 </div>
 
 <!-- Quick Actions -->
-<div class="mt-8 bg-white rounded-lg shadow-md p-6">
+<div class="bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
         <i class="fas fa-bolt mr-2 text-primary"></i>Quick Actions
     </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <a href="{{ url_for('create') }}" class="flex items-center p-4 bg-primary bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
             <i class="fas fa-plus-circle text-2xl text-primary mr-3"></i>
             <div>
-                <h3 class="font-medium text-gray-800">Add New Book</h3>
-                <p class="text-sm text-gray-600">Expand your library</p>
+                <h3 class="font-medium text-gray-800">Add Book</h3>
+                <p class="text-sm text-gray-600">Add new book</p>
             </div>
         </a>
         <a href="{{ url_for('create_author') }}" class="flex items-center p-4 bg-green-500 bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
             <i class="fas fa-user-plus text-2xl text-green-500 mr-3"></i>
             <div>
-                <h3 class="font-medium text-gray-800">Add New Author</h3>
-                <p class="text-sm text-gray-600">Register new authors</p>
+                <h3 class="font-medium text-gray-800">Add Author</h3>
+                <p class="text-sm text-gray-600">Register author</p>
             </div>
         </a>
-        <a href="{{ url_for('borrowings') }}" class="flex items-center p-4 bg-accent bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
-            <i class="fas fa-exchange-alt text-2xl text-accent mr-3"></i>
+        <a href="{{ url_for('admin_users') }}" class="flex items-center p-4 bg-accent bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
+            <i class="fas fa-users text-2xl text-accent mr-3"></i>
             <div>
-                <h3 class="font-medium text-gray-800">Manage Borrowings</h3>
-                <p class="text-sm text-gray-600">Track book loans</p>
+                <h3 class="font-medium text-gray-800">Manage Users</h3>
+                <p class="text-sm text-gray-600">User management</p>
+            </div>
+        </a>
+        <a href="{{ url_for('borrowings') }}" class="flex items-center p-4 bg-red-500 bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
+            <i class="fas fa-exchange-alt text-2xl text-red-500 mr-3"></i>
+            <div>
+                <h3 class="font-medium text-gray-800">Borrowings</h3>
+                <p class="text-sm text-gray-600">Track loans</p>
             </div>
         </a>
     </div>

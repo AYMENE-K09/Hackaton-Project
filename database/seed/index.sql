@@ -1,4 +1,7 @@
 -- ----------------------------------------
+CREATE DATABASE library_db;
+\c library_db;
+
 -- Drop tables if they exist
 -- ----------------------------------------
 DROP TABLE IF EXISTS books_authors;
@@ -22,7 +25,11 @@ CREATE TABLE authors (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     biography TEXT,
-    birth_year INT
+    birth_year INTCREATE DATABASE library_db;
+\c library_db;
+CREATE DATABASE library_db;
+\c library_db;
+
 );
 
 -- Books table

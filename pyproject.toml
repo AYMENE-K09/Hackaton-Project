@@ -1,0 +1,12 @@
+[project]
+name = "hackaton-project"
+version = "0.1.0"
+description = "Library Management System"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask",
+    "flask-sqlalchemy",
+    "psycopg2-binary",
+    "python-dotenv"
+]

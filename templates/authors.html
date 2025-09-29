@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Authors - Library Management System{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">
+            <i class="fas fa-user-edit mr-2 text-primary"></i>Authors
+        </h1>
+        <a href="{{ url_for('create_author') }}" class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg shadow-md transition-colors flex items-center">
+            <i class="fas fa-plus mr-2"></i>Add New Author
+        </a>
+    </div>
+</div>
+
+<!-- Authors Grid -->
+{% if authors %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for author in authors %}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
+                    <i class="fas fa-user text-2xl text-primary"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">{{ author.name }}</h3>
+                    {% if author.birth_year %}
+                    <p class="text-sm text-gray-500">Born: {{ author.birth_year }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if author.biography %}
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ author.biography[:150] }}{% if author.biography|length > 150 %}...{% endif %}</p>
+            {% endif %}
+            
+            <div class="flex justify-between items-center">
+                <div class="text-sm text-gray-500">
+                    <i class="fas fa-book mr-1"></i>
+                    {{ author.books|length }} book{{ 's' if author.books|length != 1 else '' }}
+                </div>
+                <a href="{{ url_for('author_details', id=author.id) }}" 
+                   class="text-primary hover:text-secondary transition-colors">
+                    <i class="fas fa-eye"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination Info -->
+<div class="mt-8 text-center text-gray-600">
+    <p>Showing {{ authors|length }} author{{ 's' if authors|length != 1 else '' }}</p>
+</div>
+
+{% else %}
+<!-- Empty State -->
+<div class="text-center py-12">
+    <i class="fas fa-user-edit text-6xl text-gray-300 mb-4"></i>
+    <h3 class="text-xl font-semibold text-gray-600 mb-2">No Authors Found</h3>
+    <p class="text-gray-500 mb-6">Start building your author database by adding your first author.</p>
+    <a href="{{ url_for('create_author') }}" class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg shadow-md transition-colors inline-flex items-center">
+        <i class="fas fa-plus mr-2"></i>Add Your First Author
+    </a>
+</div>
+{% endif %}
+{% endblock %}

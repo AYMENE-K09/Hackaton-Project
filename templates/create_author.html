@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Add New Author - Library Management System{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-user-plus mr-2 text-primary"></i>Add New Author
+        </h1>
+        <p class="text-gray-600">Fill in the details below to add a new author to your library.</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <form method="post" class="space-y-6">
+            <!-- Name -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-user mr-1"></i>Author Name *
+                </label>
+                <input type="text" 
+                       id="name" 
+                       name="name" 
+                       required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                       placeholder="Enter author's full name">
+            </div>
+
+            <!-- Birth Year -->
+            <div>
+                <label for="birth_year" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-calendar mr-1"></i>Birth Year
+                </label>
+                <input type="number" 
+                       id="birth_year" 
+                       name="birth_year" 
+                       min="1000" 
+                       max="{{ current_year }}"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                       placeholder="e.g., 1965">
+            </div>
+
+            <!-- Biography -->
+            <div>
+                <label for="biography" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-align-left mr-1"></i>Biography
+                </label>
+                <textarea id="biography" 
+                          name="biography" 
+                          rows="6"
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"
+                          placeholder="Enter author's biography (optional)"></textarea>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                <a href="{{ url_for('authors') }}" 
+                   class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </a>
+                <button type="submit" 
+                        class="px-6 py-3 bg-primary hover:bg-secondary text-white rounded-lg shadow-md transition-colors">
+                    <i class="fas fa-save mr-2"></i>Add Author
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
